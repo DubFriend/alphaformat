@@ -1,0 +1,7 @@
+[ignore]
+<PROJECT_ROOT>/lib/.*
+[include]
+
+[libs]
+
+[options]

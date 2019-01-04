@@ -1,4 +1,3 @@
 .DS_Store
 flow-typed
-lib
-node_modules
+src
