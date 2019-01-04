@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/DubFriend/alphaformat/issues"
   },
-  "homepage": "https://github.com/DubFriend/alphaformat#readme"
+  "homepage": "https://github.com/DubFriend/alphaformat#readme",
+  "dependencies": {
+    "@babel/parser": "^7.2.3"
+  }
 }
