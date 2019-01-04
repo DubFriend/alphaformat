@@ -1,9 +1,21 @@
 // @flow
 const { expect } = require('chai');
-const { hi } = require('./index');
+const { parse } = require('./index');
 
-describe('hi', () => {
-  it('should return "hi"', async () => {
-    expect(hi()).to.equal('hi');
+describe('parse', () => {
+  it('should parse into an AST', async () => {
+    console.log(
+      parse(`
+const foo = 5;
+
+const bar = {
+  a: 5,
+  b: 6
+};
+
+function bar (a) {
+  return foo;
+}`).program.body
+    );
   });
 });
