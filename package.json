@@ -1,0 +1,29 @@
+{
+  "name": "alphaformat",
+  "version": "0.0.0",
+  "description": "Alphabetically format javascript codebases",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/DubFriend/alphaformat.git"
+  },
+  "keywords": [
+    "alphabetize",
+    "format",
+    "prettier",
+    "javascript",
+    "nodejs",
+    "node",
+    "source",
+    "code"
+  ],
+  "author": "Brian Detering",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DubFriend/alphaformat/issues"
+  },
+  "homepage": "https://github.com/DubFriend/alphaformat#readme"
+}
