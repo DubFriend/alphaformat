@@ -1,21 +1,25 @@
 // @flow
 const { expect } = require('chai');
-const { parse } = require('./index');
+const { parse, generate } = require('./index');
 
-describe('parse', () => {
-  it('should parse into an AST', async () => {
-    console.log(
-      parse(`
+const source = `
 const foo = 5;
 
-const bar = {
+var bar = {
   a: 5,
   b: 6
 };
 
-function bar (a) {
+let bg = function bar (a) {
   return foo;
-}`).program.body
-    );
+}`;
+
+describe('parse', () => {
+  it('should parse into an AST', async () => {
+    console.log(parse(source).program.body[0]);
+  });
+
+  it('should return original source unmodified', async () => {
+    console.log(generate(parse(source)));
   });
 });
