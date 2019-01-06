@@ -16,17 +16,55 @@ describe('walk', () => {
     return types.slice(2);
   };
 
-  it('should walk an "if else" statement', () => {
+  // const itShouldWalk = (
+  //   name: string,
+  //   {
+  //     code,
+  //     expectedTypes,
+  //   }: {|
+  //     code: string,
+  //     expectedTypes: Array<string>,
+  //   |}
+  // ) => {
+  //   it(`should walk ${name}`, () => {
+  //     expect(types(code)).to.deep.equal(expectedTypes);
+  //   });
+  // };
+
+  // itShouldWalk('an "if, else if, else" statement', {
+  //   code: `if(true) {
+  //       5;
+  //     } else if (5) {
+  //       'a';
+  //     } else {
+  //       true;
+  //     }`,
+  //   expectedTypes: [
+  //     'IfStatement',
+  //     'BooleanLiteral',
+  //     'BlockStatement',
+  //     'ExpressionStatement',
+  //     'NumericLiteral',
+  //     'IfStatement',
+  //     'NumericLiteral',
+  //     'BlockStatement',
+  //     'ExpressionStatement',
+  //     'StringLiteral',
+  //     'BlockStatement',
+  //     'ExpressionStatement',
+  //     'BooleanLiteral',
+  //   ],
+  // });
+
+  it('should walk an "if, else if, else" statement', () => {
     expect(
-      types(`
-        if(true) {
-          5;
-        } else if (5) {
-          'a';
-        } else {
-          true;
-        }
-      `)
+      types(`if(true) {
+        5;
+      } else if (5) {
+        'a';
+      } else {
+        true;
+      }`)
     ).to.deep.equal([
       'IfStatement',
       'BooleanLiteral',
@@ -71,7 +109,7 @@ describe('walk', () => {
   });
 
   it('should walk an arrow function expression', () => {
-    expect(types(`const foo = () => {};`)).to.deep.equal([
+    expect(types(`const foo = () => {}`)).to.deep.equal([
       'VariableDeclaration',
       'VariableDeclarator',
       'Identifier',
