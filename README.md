@@ -1,3 +1,5 @@
 # Alphaformat
 
-Alphabetically format javascript codebases
+Customizable code formatting of Javascript codebases.
+
+For example, automatically sort all the keys of Javascript objects

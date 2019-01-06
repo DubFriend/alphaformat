@@ -1,25 +1,45 @@
 // @flow
 const { expect } = require('chai');
-const { parse, generate } = require('./index');
+const { transform } = require('./index');
 
-const source = `
-const foo = 5;
+describe('transform', () => {
+  it('should return code unmodified by default', () => {
+    const source = `
+    // @flow
 
-var bar = {
-  a: 5,
-  b: 6
-};
+    type Foo = {|
+      a: number,
+      b: string
+    |}
 
-let bg = function bar (a) {
-  return foo;
-}`;
+    // comment
 
-describe('parse', () => {
-  it('should parse into an AST', async () => {
-    console.log(parse(source).program.body[0]);
+    const foo = 5;
+
+    let bg = function bar (a) {
+      return foo;
+    };
+    `;
+    expect(transform({ source })).to.equal(source);
   });
 
-  it('should return original source unmodified', async () => {
-    console.log(generate(parse(source)));
+  it('should have option to sort object keys', () => {
+    const source = `
+    var bar = {
+      b: { n: 1, m: 2 },
+      a: 5,
+    };
+    `;
+    expect(
+      transform({
+        source,
+        options: { sortObjectKeys: (a, b) => (a > b ? -1 : 1) },
+      })
+    ).to.equal(`
+    var bar = {
+      a: 5,
+      b: { m: 2, n: 1 },
+    };
+    `);
   });
 });

@@ -1,15 +1,26 @@
 // @flow
+const parse = require('./parse');
+const print = require('./print');
+const walk = require('./walk');
 
-exports.hi = (): string => 'hi';
-const parser = require('@babel/parser');
-const generator = require('@babel/generator');
+exports.transform = ({
+  source,
+  options,
+}: {|
+  source: string,
+  options?: { sortObjectKeys?: (a: string, b: string) => number },
+|}): string => {
+  const ast = parse(source);
 
-console.log(generator);
+  const opt = options || {};
 
-exports.parse = (code: string): Object =>
-  parser.parse(code, {
-    sourceType: 'module',
-    plugins: ['jsx', 'flow'],
-  });
+  if (opt.sortObjectKeys) {
+    walk(ast, n => {
+      if (n.type === 'ObjectExpression') {
+        n.properties.sort(opt.sortObjectKeys);
+      }
+    });
+  }
 
-exports.generate = (ast: Object): string => generator.default(ast).code;
+  return print(ast);
+};
