@@ -19,6 +19,7 @@ const walk = (node: Object, cb: (*) => void) => {
       node.declarations.map(n => walk(n, cb));
       break;
     case 'VariableDeclarator':
+      walk(node.id, cb);
       walk(node.init, cb);
       break;
     case 'IfStatement':
@@ -39,6 +40,9 @@ const walk = (node: Object, cb: (*) => void) => {
       node.body.map(n => walk(n, cb));
       break;
     case 'ObjectExpression':
+      node.properties.map(n => walk(n, cb));
+      break;
+    case 'ObjectPattern':
       node.properties.map(n => walk(n, cb));
       break;
     case 'ObjectProperty':

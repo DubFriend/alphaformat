@@ -8,10 +8,17 @@ const parse = require('./parse');
 const walk = require('./walk');
 
 describe('walk', () => {
-  it('should walk an "if else" statement', () => {
+  const types = (code: string): Array<string> => {
     const types = [];
-    walk(
-      parse(`
+    walk(parse(code), node => {
+      types.push(node.type);
+    });
+    return types.slice(2);
+  };
+
+  it('should walk an "if else" statement', () => {
+    expect(
+      types(`
         if(true) {
           5;
         } else if (5) {
@@ -19,14 +26,8 @@ describe('walk', () => {
         } else {
           true;
         }
-      `),
-      node => {
-        types.push(node.type);
-      }
-    );
-    expect(types).to.deep.equal([
-      'File',
-      'Program',
+      `)
+    ).to.deep.equal([
       'IfStatement',
       'BooleanLiteral',
       'BlockStatement',
@@ -44,13 +45,7 @@ describe('walk', () => {
   });
 
   it('should walk a called function', () => {
-    const types = [];
-    walk(parse(`console.log('hi')`), node => {
-      types.push(node.type);
-    });
-    expect(types).to.deep.equal([
-      'File',
-      'Program',
+    expect(types(`console.log('hi')`)).to.deep.equal([
       'ExpressionStatement',
       'CallExpression',
       'StringLiteral',
@@ -58,15 +53,10 @@ describe('walk', () => {
   });
 
   it('should walk the params of a function expression', () => {
-    const types = [];
-    walk(parse(`let bg = function bar (a) {};`), node => {
-      types.push(node.type);
-    });
-    expect(types).to.deep.equal([
-      'File',
-      'Program',
+    expect(types(`let bg = function bar (a) {}`)).to.deep.equal([
       'VariableDeclaration',
       'VariableDeclarator',
+      'Identifier',
       'FunctionExpression',
       'Identifier',
       'BlockStatement',
@@ -74,40 +64,24 @@ describe('walk', () => {
   });
 
   it('should walk a function declaration', () => {
-    const types = [];
-    walk(parse(`function foo () {}`), node => {
-      types.push(node.type);
-    });
-    expect(types).to.deep.equal([
-      'File',
-      'Program',
+    expect(types(`function foo () {}`)).to.deep.equal([
       'FunctionDeclaration',
       'BlockStatement',
     ]);
   });
 
   it('should walk an arrow function expression', () => {
-    const types = [];
-    walk(parse(`const foo = () => {};`), node => {
-      types.push(node.type);
-    });
-    expect(types).to.deep.equal([
-      'File',
-      'Program',
+    expect(types(`const foo = () => {};`)).to.deep.equal([
       'VariableDeclaration',
       'VariableDeclarator',
+      'Identifier',
       'ArrowFunctionExpression',
       'BlockStatement',
     ]);
   });
 
   it('should walk object decomposition as a variable assignment', () => {
-    // const {a, b} = module
-    const types = [];
-    walk(parse(`const { a } = module`), node => {
-      types.push(node.type);
-    });
-    expect(types).to.deep.equal([
+    expect(types(`const { a } = module`)).to.deep.equal([
       'File',
       'Program',
       'VariableDeclaration',
@@ -115,8 +89,9 @@ describe('walk', () => {
       'ObjectPattern',
       'ObjectProperty',
       'Identifier',
+      'Identifier',
     ]);
   });
 
-  it('should walk a case statement', () => {});
+  // it('should walk a case statement', () => {});
 });

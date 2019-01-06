@@ -23,24 +23,30 @@ describe('transform', () => {
     expect(transform({ source })).to.equal(source);
   });
 
-  describe('option.sortObjectKeys', () => {
-    it('should have option to sort object keys', () => {
-      expect(
-        transform({
-          source: `
+  it('should have option "sortObjectKeys"', () => {
+    expect(
+      transform({
+        source: `
           var bar = {
             b: { n: 1, m: 2 },
             a: 5
           };`,
-          options: { sortObjectKeys: (a, b) => (a > b ? -1 : 1) },
-        })
-      ).to.equal(`
+        options: { sortObjectKeys: (a, b) => (a > b ? -1 : 1) },
+      })
+    ).to.equal(`
           var bar = {
             a: 5,
             b: { m: 2, n: 1 }
           };`);
-    });
   });
 
-  // it('')
+  // it('should have option to "enforceBreaksOnCaseStatement"', () => {});
+
+  // it('should have option to "sortCaseStatementsCondition"', () => {})
+  // it('s "sortCaseStatementsCondition" option should internally sort a case statements grouped "fall through" cases', () => {})
+
+  // it('should have option to "sortFlowObjectKeys"', () => {})
+  // it('s "sortFlowObjectKeys" option should internally sort a nested Flow object keys', () => {})
+
+  // it('should have option to ');
 });
