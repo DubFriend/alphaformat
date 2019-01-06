@@ -98,5 +98,17 @@ describe('walk', () => {
     ]);
   });
 
+  it('should walk object keys of Flow type', () => {
+    expect(types('type Foo = {| a: string |}')).to.deep.equal([
+      'VariableDeclaration',
+      'VariableDeclarator',
+      'Identifier',
+      'ObjectPattern',
+      'ObjectProperty',
+      'Identifier',
+      'Identifier',
+    ]);
+  });
+
   // it('should walk a case statement', () => {});
 });
