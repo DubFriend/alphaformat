@@ -23,23 +23,24 @@ describe('transform', () => {
     expect(transform({ source })).to.equal(source);
   });
 
-  it('should have option to sort object keys', () => {
-    const source = `
-    var bar = {
-      b: { n: 1, m: 2 },
-      a: 5,
-    };
-    `;
-    expect(
-      transform({
-        source,
-        options: { sortObjectKeys: (a, b) => (a > b ? -1 : 1) },
-      })
-    ).to.equal(`
-    var bar = {
-      a: 5,
-      b: { m: 2, n: 1 },
-    };
-    `);
+  describe('option.sortObjectKeys', () => {
+    it('should have option to sort object keys', () => {
+      expect(
+        transform({
+          source: `
+          var bar = {
+            b: { n: 1, m: 2 },
+            a: 5
+          };`,
+          options: { sortObjectKeys: (a, b) => (a > b ? -1 : 1) },
+        })
+      ).to.equal(`
+          var bar = {
+            a: 5,
+            b: { m: 2, n: 1 }
+          };`);
+    });
   });
+
+  // it('')
 });

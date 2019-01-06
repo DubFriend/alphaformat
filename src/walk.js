@@ -3,6 +3,10 @@
 // this is super useful... (set parser to "babylon7"?)
 // https://astexplorer.net/
 const walk = (node: Object, cb: (*) => void) => {
+  if (!node) {
+    return;
+  }
+
   cb(node);
   switch (node.type) {
     case 'File':
@@ -17,7 +21,18 @@ const walk = (node: Object, cb: (*) => void) => {
     case 'VariableDeclarator':
       walk(node.init, cb);
       break;
+    case 'IfStatement':
+      walk(node.test, cb);
+      walk(node.consequent, cb);
+      walk(node.alternate, cb);
+      break;
+    case 'ExpressionStatement':
+      walk(node.expression, cb);
+      break;
     case 'FunctionExpression':
+    case 'FunctionDeclaration':
+    case 'ArrowFunctionExpression':
+      node.params.map(n => walk(n, cb));
       walk(node.body, cb);
       break;
     case 'BlockStatement':
@@ -36,6 +51,8 @@ const walk = (node: Object, cb: (*) => void) => {
     case 'ObjectTypeAnnotation':
       node.properties.map(n => walk(n, cb));
       break;
+    case 'CallExpression':
+      node.arguments.map(n => walk(n, cb));
   }
 };
 
