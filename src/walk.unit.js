@@ -82,8 +82,6 @@ describe('walk', () => {
 
   it('should walk object decomposition as a variable assignment', () => {
     expect(types(`const { a } = module`)).to.deep.equal([
-      'File',
-      'Program',
       'VariableDeclaration',
       'VariableDeclarator',
       'ObjectPattern',
