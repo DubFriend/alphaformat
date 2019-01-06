@@ -16,6 +16,15 @@ describe('walk', () => {
     return types.slice(2);
   };
 
+  it('should walk variable assignment', () => {
+    expect(types('const foo = 5')).to.deep.equal([
+      'VariableDeclaration',
+      'VariableDeclarator',
+      'Identifier',
+      'NumericLiteral',
+    ]);
+  });
+
   it('should walk an "if, else if, else" statement', () => {
     expect(
       types(`if(true) {
@@ -78,8 +87,8 @@ describe('walk', () => {
     ]);
   });
 
-  it('should walk object decomposition as a variable assignment', () => {
-    expect(types(`const { a } = module`)).to.deep.equal([
+  it('should walk object decomposition', () => {
+    expect(types(`var { a } = module`)).to.deep.equal([
       'VariableDeclaration',
       'VariableDeclarator',
       'ObjectPattern',
