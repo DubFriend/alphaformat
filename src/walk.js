@@ -27,8 +27,30 @@ const walk = (node: Object, cb: (*) => void) => {
       walk(node.consequent, cb);
       walk(node.alternate, cb);
       break;
+    case 'TryStatement':
+      walk(node.block, cb);
+      walk(node.handler, cb);
+      walk(node.finalizer, cb);
+      break;
+    case 'CatchClause':
+      walk(node.param, cb);
+      walk(node.body, cb);
+      break;
+    case 'SwitchStatement':
+      walk(node.discriminant, cb);
+      node.cases.map(n => walk(n, cb));
+      break;
+    case 'SwitchCase':
+      walk(node.test, cb);
+      node.consequent.map(n => walk(n, cb));
+      break;
     case 'ExpressionStatement':
       walk(node.expression, cb);
+      break;
+    case 'ConditionalExpression':
+      walk(node.test, cb);
+      walk(node.consequent, cb);
+      walk(node.alternate, cb);
       break;
     case 'FunctionExpression':
     case 'FunctionDeclaration':

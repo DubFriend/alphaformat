@@ -5,21 +5,22 @@ const { transform } = require('./index');
 describe('transform', () => {
   it('should return code unmodified by default', () => {
     const source = `
-    // @flow
+      // @flow
 
-    type Foo = {|
+    type Foo =  {|
       a: number,
-      b: string
-    |}
+       b: string
+  |}
 
-    // comment
+     // comment
 
-    const foo = 5;
+const foo =  5;
 
-    let bg = function bar (a) {
-      return foo;
-    };
-    `;
+    let bg = function bar ( a  ) {
+      return  foo ;
+     };
+    /* return  foo ;
+      */`;
     expect(transform({ source })).to.equal(source);
   });
 
@@ -43,10 +44,20 @@ describe('transform', () => {
   // it('should have option to "enforceBreaksOnCaseStatement"', () => {});
 
   // it('should have option to "sortCaseStatementsCondition"', () => {})
-  // it('s "sortCaseStatementsCondition" option should internally sort a case statements grouped "fall through" cases', () => {})
+  // it(`s "sortCaseStatementsCondition" option should internally sort a case
+  //   statements grouped "fall through" cases`, () => {});
 
   // it('should have option to "sortFlowObjectKeys"', () => {})
-  // it('s "sortFlowObjectKeys" option should internally sort a nested Flow object keys', () => {})
+  // it`'s "sortFlowObjectKeys" option should internally sort a nested Flow object
+  // keys`, () => {});
 
-  // it('should have option to ');
+  // it(`should have option to break strings using "+" operator at desired
+  //   character limit`, () => {});
+
+  // it(`should have option to break strings using "\`\`" at a desired
+  //   character limit`, () => {});
+
+  // it(`should have option to sort adjacent variable declarations at top
+  //   nesting level of the same type (const, var, let) under conditions:
+  //   `, () => {});
 });

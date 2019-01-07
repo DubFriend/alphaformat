@@ -16,44 +16,63 @@ describe('walk', () => {
     return types.slice(2);
   };
 
+  const BlockStatement = ['BlockStatement'];
+  const Identifier = ['Identifier'];
+  const VariableDeclaration = ['VariableDeclaration', 'VariableDeclarator'];
+  const IdentityVariableDeclaration = [...VariableDeclaration, 'Identifier'];
+  const ExpressionStatement = ['ExpressionStatement'];
+
   it('should walk variable assignment', () => {
     expect(types('const foo = 5')).to.deep.equal([
-      'VariableDeclaration',
-      'VariableDeclarator',
-      'Identifier',
+      ...IdentityVariableDeclaration,
+      'NumericLiteral',
+    ]);
+  });
+
+  it('should walk a block statement', () => {
+    expect(types('{ 5 }')).to.deep.equal([
+      ...BlockStatement,
+      ...ExpressionStatement,
       'NumericLiteral',
     ]);
   });
 
   it('should walk an "if, else if, else" statement', () => {
-    expect(
-      types(`if(true) {
-        5;
-      } else if (5) {
-        'a';
-      } else {
-        true;
-      }`)
-    ).to.deep.equal([
+    expect(types(`if(true) {} else if (5) {} else {}`)).to.deep.equal([
       'IfStatement',
       'BooleanLiteral',
-      'BlockStatement',
-      'ExpressionStatement',
-      'NumericLiteral',
+      ...BlockStatement,
       'IfStatement',
       'NumericLiteral',
-      'BlockStatement',
-      'ExpressionStatement',
-      'StringLiteral',
-      'BlockStatement',
-      'ExpressionStatement',
+      ...BlockStatement,
+      ...BlockStatement,
+    ]);
+  });
+
+  it('should walk a ternary expression', () => {
+    expect(types('true ? 1 : 2;')).to.deep.equal([
+      ...ExpressionStatement,
+      'ConditionalExpression',
       'BooleanLiteral',
+      'NumericLiteral',
+      'NumericLiteral',
+    ]);
+  });
+
+  it('should walk a try catch finally expression', () => {
+    expect(types('try {} catch(err) {} finally {}')).to.deep.equal([
+      'TryStatement',
+      ...BlockStatement,
+      'CatchClause',
+      ...Identifier,
+      ...BlockStatement,
+      ...BlockStatement,
     ]);
   });
 
   it('should walk a called function', () => {
-    expect(types(`console.log('hi')`)).to.deep.equal([
-      'ExpressionStatement',
+    expect(types('console.log("hi")')).to.deep.equal([
+      ...ExpressionStatement,
       'CallExpression',
       'StringLiteral',
     ]);
@@ -61,54 +80,62 @@ describe('walk', () => {
 
   it('should walk the params of a function expression', () => {
     expect(types(`let bg = function bar (a) {}`)).to.deep.equal([
-      'VariableDeclaration',
-      'VariableDeclarator',
-      'Identifier',
+      ...IdentityVariableDeclaration,
       'FunctionExpression',
-      'Identifier',
-      'BlockStatement',
+      ...Identifier,
+      ...BlockStatement,
     ]);
   });
 
   it('should walk a function declaration', () => {
     expect(types(`function foo () {}`)).to.deep.equal([
       'FunctionDeclaration',
-      'BlockStatement',
+      ...BlockStatement,
     ]);
   });
 
   it('should walk an arrow function expression', () => {
     expect(types(`const foo = () => {}`)).to.deep.equal([
-      'VariableDeclaration',
-      'VariableDeclarator',
-      'Identifier',
+      ...IdentityVariableDeclaration,
       'ArrowFunctionExpression',
-      'BlockStatement',
+      ...BlockStatement,
     ]);
   });
 
   it('should walk object decomposition', () => {
     expect(types(`var { a } = module`)).to.deep.equal([
-      'VariableDeclaration',
-      'VariableDeclarator',
+      ...VariableDeclaration,
       'ObjectPattern',
       'ObjectProperty',
-      'Identifier',
-      'Identifier',
+      ...Identifier,
+      ...Identifier,
     ]);
   });
 
   it('should walk object keys of Flow type', () => {
     expect(types('type Foo = {| a: string |}')).to.deep.equal([
-      'VariableDeclaration',
-      'VariableDeclarator',
-      'Identifier',
-      'ObjectPattern',
-      'ObjectProperty',
-      'Identifier',
-      'Identifier',
+      'TypeAlias',
+      'ObjectTypeAnnotation',
+      'ObjectTypeProperty',
     ]);
   });
 
-  // it('should walk a case statement', () => {});
+  it('should walk case statement', () => {
+    expect(
+      types(`switch(true) {
+        case 'a':
+          break;
+        default:
+          break;
+      }`)
+    ).to.deep.equal([
+      'SwitchStatement',
+      'BooleanLiteral',
+      'SwitchCase',
+      'StringLiteral',
+      'BreakStatement',
+      'SwitchCase',
+      'BreakStatement',
+    ]);
+  });
 });
