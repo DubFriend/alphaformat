@@ -1,5 +1,10 @@
 // @flow
 
+// why not outsource the walking?
+// https://github.com/acornjs/acorn/tree/master/acorn-walk
+// https://github.com/pugjs/babylon-walk
+// https://github.com/babel/babel/tree/master/packages/babel-traverse
+
 // this is super useful... (set parser to "babylon7"?)
 // https://astexplorer.net/
 const walk = (node: Object, cb: (*) => void) => {
