@@ -60,4 +60,6 @@ const foo =  5;
   // it(`should have option to sort adjacent variable declarations at top
   //   nesting level of the same type (const, var, let) under conditions:
   //   `, () => {});
+
+  // it('should have option to sort describe, it blocks of mocha tests')
 });
