@@ -16,3 +16,13 @@ For example, automatically sort all the keys of Javascript objects
 - https://github.com/pugjs/babylon-walk
 - https://github.com/babel/babel/tree/master/packages/babel-traverse
 - https://github.com/acornjs/acorn#distwalkjs
+
+## Design
+
+### Rules
+
+### Parser
+
+### Printer
+
+###
