@@ -24,7 +24,7 @@ const foo =  5;
     expect(transform({ source })).to.equal(source);
   });
 
-  describe('option.sortObjectKeys', () => {
+  describe('option.SortObjectKeys', () => {
     it('should have option "sortObjectKeys"', () => {
       expect(
         transform({
@@ -34,7 +34,7 @@ const foo =  5;
             a: 5
           };`,
           options: {
-            sortObjectKeys: { comparator: (a, b) => (a > b ? -1 : 1) },
+            SortObjectKeys: { comparator: (a, b) => (a > b ? -1 : 1) },
           },
         })
       ).to.equal(`
@@ -56,7 +56,7 @@ const foo =  5;
   //         const foo = ({ a, b }) => {};`);
   // });
 
-  describe('insertBreaksOnSwitchCase', () => {
+  describe('InsertBreaksOnSwitchCase', () => {
     it('should have option to "insertBreaksOnSwitchCase"', () => {
       expect(
         transform({
@@ -66,7 +66,7 @@ const foo =  5;
                 console.log('a');
             }`,
           options: {
-            insertBreaksOnSwitchCase: { insertOnEmptySwitchCase: false },
+            InsertBreaksOnSwitchCase: { insertOnEmptySwitchCase: false },
           },
         })
       ).to.equal(`
@@ -85,7 +85,7 @@ const foo =  5;
               case 'foo':
             }`,
           options: {
-            insertBreaksOnSwitchCase: { insertOnEmptySwitchCase: false },
+            InsertBreaksOnSwitchCase: { insertOnEmptySwitchCase: false },
           },
         })
       ).to.equal(`
@@ -102,7 +102,7 @@ const foo =  5;
               case 'foo':
             }`,
           options: {
-            insertBreaksOnSwitchCase: { insertOnEmptySwitchCase: true },
+            InsertBreaksOnSwitchCase: { insertOnEmptySwitchCase: true },
           },
         })
       ).to.equal(`

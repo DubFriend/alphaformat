@@ -2,7 +2,7 @@
 const parse = require('./parse');
 const print = require('./print');
 const walk = require('./walk');
-const { sortObjectKeys, insertBreaksOnSwitchCase } = require('./rules');
+const { rules } = require('./rules');
 
 exports.transform = ({
   source,
@@ -10,23 +10,36 @@ exports.transform = ({
 }: {|
   source: string,
   options?: {
-    sortObjectKeys?: { comparator?: (a: string, b: string) => number },
-    insertBreaksOnSwitchCase?: { insertOnEmptySwitchCase?: boolean },
+    SortObjectKeys?: { comparator?: (a: string, b: string) => number },
+    InsertBreaksOnSwitchCase?: { insertOnEmptySwitchCase?: boolean },
   },
 |}): string => {
-  const ast = parse(source);
-
   const opt = options || {};
 
-  if (opt.sortObjectKeys) {
-    walk(ast, { ObjectExpression: sortObjectKeys(opt.sortObjectKeys) });
+  const map = rules
+    .filter(Rule => opt[Rule.name])
+    .map(Rule => new Rule(opt[Rule.name]))
+    .reduce((acc, rule) => {
+      rule.types.forEach(type => {
+        if (!acc[type]) {
+          acc[type] = [];
+        }
+        acc[type].push(rule);
+      });
+      return acc;
+    }, {});
+
+  const config = {};
+
+  for (const key in map) {
+    config[key] = p => {
+      map[key].forEach(rule => {
+        rule.run(p);
+      });
+    };
   }
 
-  if (opt.insertBreaksOnSwitchCase) {
-    walk(ast, {
-      SwitchCase: insertBreaksOnSwitchCase(opt.insertBreaksOnSwitchCase),
-    });
-  }
-
+  const ast = parse(source);
+  walk(ast, config);
   return print(ast);
 };
